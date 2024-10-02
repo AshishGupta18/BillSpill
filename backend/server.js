@@ -22,6 +22,12 @@ app.use('/api/expenses', expenseRoutes);
 // MongoDB Connection
 connectDB();
 
+// Middleware for error handling
+app.use((err, req, res, next) => {
+    console.error('An error occurred:', err);
+    res.status(500).json({ message: 'Internal Server Error' });
+  });
+
 const startServer = async () => {
     try {
       await connectDB();
