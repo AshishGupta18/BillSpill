@@ -9,7 +9,7 @@ const sampleGroups = [
     { id: '4', name: 'Gym Buddies' },
 ];
 
-const Sidebar = () => {
+const Sidebar = ({ onGroupClick }) => {
     return (
         <div className="p-4">
             {/* Dashboard Header */}
@@ -41,7 +41,11 @@ const Sidebar = () => {
                     {sampleGroups.map((group) => (
                         <li key={group.id} className="flex items-center space-x-4 p-2 rounded-md hover:bg-gray-200 transition duration-200">
                             <i className="fas fa-bookmark text-teal-600 text-xl" />
-                            <Link to={`/user/home/groups/${group.id}`} className="text-teal-600 hover:text-teal-700">
+                            <Link
+                                to="#"
+                                onClick={() => onGroupClick(group.id)} // Call onGroupClick when the group is clicked
+                                className="text-teal-600 hover:text-teal-700"
+                            >
                                 {group.name}
                             </Link>
                         </li>
