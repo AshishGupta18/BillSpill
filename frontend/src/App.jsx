@@ -12,7 +12,7 @@ const App = () => {
   return (
     <AuthProvider>
    
-      <Navbar />
+      {/* <Navbar /> */}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />

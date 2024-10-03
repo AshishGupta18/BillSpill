@@ -1,34 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from "react-router-dom";
-import axios from 'axios';
-import GroupBackendAPIService from "../../services/GroupBackendAPIService";
 
-const API_ENDPOINT = process.env.REACT_APP_ENDPOINT;
+// Sample hardcoded groups data
+const sampleGroups = [
+    { id: '1', name: 'Family' },
+    { id: '2', name: 'Friends' },
+    { id: '3', name: 'Work' },
+    { id: '4', name: 'Gym Buddies' },
+];
 
 const Sidebar = () => {
-    const [allGroups, setAllGroups] = useState([]);
-
-    useEffect(() => {
-        GroupBackendAPIService.getAllGroups().then(({ data, success }) => {
-            if (success) {
-                setAllGroups(data.acceptedGroups);
-            }
-        });
-    }, []);
-
-    useEffect(() => {
-        const token = JSON.parse(localStorage.getItem('token'));
-        axios.get(`${API_ENDPOINT}/groups/all`, {
-            headers: {
-                authorization: `Bearer ${token}`
-            }
-        }).then((res) => {
-            if (res.data.success) {
-                setAllGroups(res.data.data.acceptedGroups);
-            }
-        });
-    }, []);
-
     return (
         <div className="p-4">
             {/* Dashboard Header */}
@@ -57,7 +38,7 @@ const Sidebar = () => {
                     </Link>
                 </div>
                 <ul className="space-y-2">
-                    {allGroups.map((group) => (
+                    {sampleGroups.map((group) => (
                         <li key={group.id} className="flex items-center space-x-4 p-2 rounded-md hover:bg-gray-200 transition duration-200">
                             <i className="fas fa-bookmark text-teal-600 text-xl" />
                             <Link to={`/user/home/groups/${group.id}`} className="text-teal-600 hover:text-teal-700">
