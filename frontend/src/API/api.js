@@ -2,12 +2,12 @@ import axios from 'axios';
 
 const BASE_URL = 'http://localhost:5000/api/auth';
 
-export const signup = async (email, password) => {
-  const response = await axios.post(`${BASE_URL}/signup`, {
+export const signup = async (username, email, password) => {
+  return await axios.post(`${BASE_URL}/signup`, {
+    username,
     email,
     password,
   });
-  return response;
 };
 
 export const login = async (email, password) => {

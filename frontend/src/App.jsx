@@ -5,13 +5,13 @@ import { AuthProvider } from './Context/AuthContext';
 import Navbar from './components/Navbar';
 import Login from './components/Authentication/LoginPage';
 import Signup from './components/Authentication/SignUpPage';
-import Dashboard from './components/Dashboard';
+import Dashboard from './components/Dashboard/Dashboard';
 
 
 const App = () => {
   return (
     <AuthProvider>
-    <Router>
+   
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -19,7 +19,7 @@ const App = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
-    </Router>
+   
     </AuthProvider>
   );
 }
