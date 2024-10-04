@@ -31,7 +31,7 @@ Before you begin, ensure you have the following installed on your machine:
    git clone https://github.com/AshishGupta18/BillSplit.git
 
 2.	**Navigate to the project directory:**   
-```bash
+```
 cd BillSplit
 	
 3.	**Install dependencies for both frontend and backend:**   
