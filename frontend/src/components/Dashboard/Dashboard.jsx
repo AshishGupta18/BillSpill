@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
-import "tailwindcss/tailwind.css";
+
 
 // Placeholder components for different sections
 const DashboardHome = () => (
@@ -15,23 +15,26 @@ const Expenses = ({ group, expenses }) => (
     <div className="p-4">
         <h1 className="text-3xl font-bold text-gray-800">{group.name} Expenses</h1>
         <div className="space-y-4">
-            {expenses.map((expense, index) => (
-                <div key={index} className="bg-white p-4 shadow rounded-md">
-                    <div className="flex justify-between">
-                        <span>{expense.date}</span>
-                        <div className="flex space-x-4">
-                            <span>{expense.paidBy} Paid {expense.amount}</span>
-                            <span>{expense.description}</span>
-                            <span>You owe {expense.owesAmount}</span>
+            {expenses.length > 0 ? (
+                expenses.map((expense, index) => (
+                    <div key={index} className="bg-white p-4 shadow rounded-md">
+                        <div className="flex justify-between">
+                            <span>{expense.date}</span>
+                            <div className="flex space-x-4">
+                                <span>{expense.paidBy} Paid {expense.amount}</span>
+                                <span>{expense.description}</span>
+                                <span>You owe {expense.owesAmount}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            ))}
+                ))
+            ) : (
+                <p className="text-gray-600">No expenses found for this group.</p>
+            )}
         </div>
     </div>
 );
 
-// Add Expense Form
 const AddExpenseForm = ({ onSubmit, groupMembers }) => {
     const [description, setDescription] = useState('');
     const [amount, setAmount] = useState(0);
@@ -40,7 +43,14 @@ const AddExpenseForm = ({ onSubmit, groupMembers }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (amount <= 0 || !description) {
+            alert('Please provide valid description and amount');
+            return;
+        }
         onSubmit({ description, amount, splitOption, selectedMembers });
+        setDescription('');
+        setAmount(0);
+        setSelectedMembers([]);
     };
 
     const handleMemberSelect = (member) => {
@@ -52,7 +62,7 @@ const AddExpenseForm = ({ onSubmit, groupMembers }) => {
     };
 
     return (
-        <div className="bg-white p-6 shadow-lg rounded-lg">
+        <div className="bg-white p-6 shadow-lg rounded-lg mt-6">
             <h2 className="text-2xl mb-4">Add Expense</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
@@ -62,6 +72,7 @@ const AddExpenseForm = ({ onSubmit, groupMembers }) => {
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         className="w-full border border-gray-300 p-2 rounded-md"
+                        required
                     />
                 </div>
                 <div className="mb-4">
@@ -71,6 +82,7 @@ const AddExpenseForm = ({ onSubmit, groupMembers }) => {
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
                         className="w-full border border-gray-300 p-2 rounded-md"
+                        required
                     />
                 </div>
                 <div className="mb-4">
@@ -107,40 +119,48 @@ const AddExpenseForm = ({ onSubmit, groupMembers }) => {
     );
 };
 
-// Settle Up Section
 const SettleUp = ({ balances, onSettle }) => (
     <div className="p-4">
         <h2 className="text-2xl font-bold mb-4">Settle Balances</h2>
-        {balances.map((balance, index) => (
-            <div key={index} className="flex justify-between items-center bg-white p-4 rounded-md mb-4 shadow">
-                <span>{balance.memberName} owes you {balance.amount}</span>
-                <button onClick={() => onSettle(balance)} className="bg-green-500 text-white px-4 py-2 rounded-md">
-                    Settle
-                </button>
-            </div>
-        ))}
+        {balances.length > 0 ? (
+            balances.map((balance, index) => (
+                <div key={index} className="flex justify-between items-center bg-white p-4 rounded-md mb-4 shadow">
+                    <span>{balance.memberName} owes you {balance.amount}</span>
+                    <button onClick={() => onSettle(balance)} className="bg-green-500 text-white px-4 py-2 rounded-md">
+                        Settle
+                    </button>
+                </div>
+            ))
+        ) : (
+            <p className="text-gray-600">No balances to settle up.</p>
+        )}
     </div>
 );
 
-// Group Balances Component
 const GroupBalances = ({ balances }) => (
-    <div className="bg-white shadow-lg rounded-lg p-6">
+    <div className="bg-white shadow-lg rounded-lg p-6 mt-6">
         <h2 className="text-2xl font-bold mb-4">Group Balances</h2>
         <div className="space-y-2">
-            <h3 className="text-xl font-semibold text-gray-700">People owe you:</h3>
-            {balances.filter(balance => balance.isOwedToYou).map((balance, index) => (
-                <div key={index} className="flex justify-between">
-                    <span>{balance.memberName} owes you</span>
-                    <span>${balance.amount}</span>
-                </div>
-            ))}
-            <h3 className="text-xl font-semibold text-gray-700 mt-4">You owe to:</h3>
-            {balances.filter(balance => !balance.isOwedToYou).map((balance, index) => (
-                <div key={index} className="flex justify-between">
-                    <span>You owe {balance.memberName}</span>
-                    <span>${balance.amount}</span>
-                </div>
-            ))}
+            {balances.length > 0 ? (
+                <>
+                    <h3 className="text-xl font-semibold text-gray-700">People owe you:</h3>
+                    {balances.filter(balance => balance.isOwedToYou).map((balance, index) => (
+                        <div key={index} className="flex justify-between">
+                            <span>{balance.memberName} owes you</span>
+                            <span>${balance.amount}</span>
+                        </div>
+                    ))}
+                    <h3 className="text-xl font-semibold text-gray-700 mt-4">You owe to:</h3>
+                    {balances.filter(balance => !balance.isOwedToYou).map((balance, index) => (
+                        <div key={index} className="flex justify-between">
+                            <span>You owe {balance.memberName}</span>
+                            <span>${balance.amount}</span>
+                        </div>
+                    ))}
+                </>
+            ) : (
+                <p className="text-gray-600">No balances found.</p>
+            )}
         </div>
     </div>
 );
@@ -151,6 +171,7 @@ const Dashboard = () => {
     const [expenses, setExpenses] = useState([]);
     const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
     const [isSettleUpOpen, setIsSettleUpOpen] = useState(false);
+    const navigate = useNavigate();
 
     // Mock data for group balances and members
     const groupBalances = [
@@ -159,99 +180,67 @@ const Dashboard = () => {
     ];
     const groupMembers = [{ id: '1', name: 'John' }, { id: '2', name: 'Jane' }];
 
-    // Handle group selection
     const handleGroupClick = (groupId) => {
         setSelectedGroup(groupId);
         const mockExpenses = [
-            { date: '2024-01-15', description: 'Dinner', amount: 50, paidBy: 'John', paidAmount: 50, owesAmount: 25 },
-            { date: '2024-01-20', description: 'Groceries', amount: 100, paidBy: 'Jane', paidAmount: 100, owesAmount: 75 },
+            { date: '2024-01-15', description: 'Dinner', amount: 50, paidBy: 'John', owesAmount: 25 },
+            { date: '2024-01-20', description: 'Groceries', amount: 100, paidBy: 'Jane', owesAmount: 75 },
         ];
         setExpenses(mockExpenses);
     };
 
-    // Handle adding new expense
     const handleAddExpense = (expense) => {
         setExpenses([...expenses, expense]);
         setIsAddExpenseOpen(false);
     };
 
-    // Handle settling up
     const handleSettleUp = (balance) => {
         alert(`Settled with ${balance.memberName} for ${balance.amount}`);
         setIsSettleUpOpen(false);
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate('/login');
+    };
+
     return (
         <div className="min-h-screen flex flex-col">
             {/* Navbar */}
-            <nav className="bg-teal-600 text-white shadow-md">
-                <div className="container mx-auto flex justify-between items-center py-4">
-                    <Link to="/" className="text-2xl font-bold">BillSplit</Link>
-                    <button
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="block lg:hidden bg-teal-700 px-3 py-2 rounded-md text-white"
-                    >
-                        Menu
-                    </button>
-                    <ul className="hidden lg:flex space-x-4 items-center">
-                        <li>
-                            <Link to="/home" className="bg-teal-500 px-4 py-2 rounded hover:bg-teal-700">Dashboard</Link>
-                        </li>
-                        <li>
-                            <Link to="/profile" className="px-4 py-2 rounded hover:bg-teal-500">
-                                <i className="fas fa-user"></i> Profile
-                            </Link>
-                        </li>
-                        <li>
-                            <button className="bg-red-500 px-4 py-2 rounded hover:bg-red-600">Log Out</button>
-                        </li>
-                    </ul>
-                </div>
+            <nav className="bg-teal-600 text-white p-4 flex justify-between items-center">
+                <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden">
+                    <span className="sr-only">Open sidebar</span>
+                    ☰
+                </button>
+                <h1 className="text-2xl font-bold">Dashboard</h1>
+                <button onClick={handleLogout} className="bg-red-500 px-4 py-2 rounded">Logout</button>
             </nav>
 
-            {/* Main Content */}
-            <div className="flex flex-1">
+            <div className="flex flex-grow">
                 {/* Sidebar */}
-                <aside className={`w-64 bg-white shadow-lg ${isMenuOpen ? 'block' : 'hidden'} lg:block`}>
-                    <Sidebar onGroupClick={handleGroupClick} />
-                </aside>
+                <Sidebar isMenuOpen={isMenuOpen} onGroupClick={handleGroupClick} />
 
-                {/* Main Display */}
-                <main className="flex-1 p-6 bg-gray-50">
-                    {selectedGroup ? (
-                        <div className="flex">
-                            <div className="flex-1 pr-4">
-                                {/* Expenses Section */}
-                                <Expenses group={selectedGroup} expenses={expenses} />
-                                {/* Add Expense Button */}
-                                <button onClick={() => setIsAddExpenseOpen(true)} className="bg-teal-500 text-white px-4 py-2 rounded-lg">
-                                    Add Expense
-                                </button>
-                                {/* Settle Up Button */}
-                                <button onClick={() => setIsSettleUpOpen(true)} className="bg-green-500 text-white px-4 py-2 rounded-lg ml-4">
-                                    Settle Up
-                                </button>
-
-                                {/* Add Expense Form */}
-                                {isAddExpenseOpen && <AddExpenseForm onSubmit={handleAddExpense} groupMembers={groupMembers} />}
-                            </div>
-
-                            {/* Group Balances Section */}
-                            <div className="w-64">
-                                <GroupBalances balances={groupBalances} />
-                            </div>
-                        </div>
+                {/* Main Content */}
+                <div className="flex-grow bg-gray-100 p-6">
+                    {!selectedGroup ? (
+                        <DashboardHome />
                     ) : (
-                        <div className="flex justify-center items-center h-full">
-                            <button onClick={() => alert('Please select a group.')} className="bg-teal-500 text-white px-4 py-2 rounded-lg">
-                                Select a Group to View Details
-                            </button>
-                        </div>
+                        <>
+                            <Expenses group={{ name: "Group Name" }} expenses={expenses} />
+                            <GroupBalances balances={groupBalances} />
+                            {isAddExpenseOpen && <AddExpenseForm onSubmit={handleAddExpense} groupMembers={groupMembers} />}
+                            {isSettleUpOpen && <SettleUp balances={groupBalances} onSettle={handleSettleUp} />}
+                        </>
                     )}
 
-                    {/* Settle Up Section */}
-                    {isSettleUpOpen && <SettleUp balances={groupBalances} onSettle={handleSettleUp} />}
-                </main>
+                    {/* Buttons for Add Expense and Settle Up */}
+                    {selectedGroup && (
+                        <div className="fixed bottom-4 right-4 space-y-2">
+                            <button onClick={() => setIsAddExpenseOpen(true)} className="bg-teal-500 text-white px-6 py-2 rounded-md shadow-lg">Add Expense</button>
+                            <button onClick={() => setIsSettleUpOpen(true)} className="bg-green-500 text-white px-6 py-2 rounded-md shadow-lg">Settle Up</button>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

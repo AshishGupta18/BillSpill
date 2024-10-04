@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  bcrpyt:
+    specifier: ^2.0.0
+    version: 2.0.0
   bcryptjs:
     specifier: ^2.4.3
     version: 2.4.3
@@ -962,6 +965,11 @@ packages:
 
   /balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
+
+  /bcrpyt@2.0.0:
+    resolution: {integrity: sha512-2dLzspsuyGKoUfV16yEOMflPsKOjUhFPiSjqeBr1Y0ZZceEcjayGlsUrIcOz9I6f+IwjBDuPSXnsjGAqIZcPPA==}
+    deprecated: Package abandoned, contact support@npmjs.com for more info.
+    dev: false
 
   /bcryptjs@2.4.3:
     resolution: {integrity: sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==}
