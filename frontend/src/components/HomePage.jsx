@@ -10,7 +10,7 @@ const Home = () => {
       }}
     >
       {/* Navbar */}
-      <nav className="bg-teal-600 py-4 shadow-lg">
+      <nav className="bg-slate-400 py-4 shadow-lg">
         <div className="container mx-auto flex justify-between items-center">
           <Link to="/" className="text-black flex items-center space-x-2">
             <img

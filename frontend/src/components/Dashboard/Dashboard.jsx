@@ -5,38 +5,93 @@ import RecentActivity from "./RecentActivities";
 import PaymentList from "../PaymentList";
 
 // Placeholder components for different sections
+
 const DashboardHome = () => (
   <div className="p-4">
     <h1 className="text-3xl font-bold text-gray-800">Dashboard Overview</h1>
     <p className="text-gray-600">Welcome to your BillSplit dashboard.</p>
-  </div>
-);
+    
+    {/* Summary Section */}
+    <div className="mt-6 bg-white p-4 rounded shadow-md">
+      <h2 className="text-2xl font-semibold text-gray-800">Summary</h2>
+      <div className="grid grid-cols-3 gap-4 mt-4">
+        <div className="bg-teal-100 p-4 rounded shadow">
+          <h3 className="font-bold">Total Expenses</h3>
+          <p className="text-xl text-teal-600">$1,200</p>
+        </div>
+        <div className="bg-teal-100 p-4 rounded shadow">
+          <h3 className="font-bold">Total Groups</h3>
+          <p className="text-xl text-teal-600">4</p>
+        </div>
+        <div className="bg-teal-100 p-4 rounded shadow">
+          <h3 className="font-bold">Pending Settlements</h3>
+          <p className="text-xl text-teal-600">$200</p>
+        </div>
+      </div>
+    </div>
 
-const Expenses = ({ group, expenses }) => (
-  <div className="p-4">
-    <h1 className="text-3xl font-bold text-gray-800">{group.name} Expenses</h1>
-    <div className="space-y-4">
-      {expenses.length > 0 ? (
-        expenses.map((expense, index) => (
-          <div key={index} className="bg-white p-4 shadow rounded-md">
-            <div className="flex justify-between">
-              <span>{expense.date}</span>
-              <div className="flex space-x-4">
-                <span>
-                  {expense.paidBy} Paid {expense.amount}
-                </span>
-                <span>{expense.description}</span>
-                <span>You owe {expense.owesAmount}</span>
-              </div>
-            </div>
-          </div>
-        ))
-      ) : (
-        <p className="text-gray-600">No expenses found for this group.</p>
-      )}
+    {/* Recent Activity Section */}
+    <div className="mt-6 bg-white p-4 rounded shadow-md">
+      <h2 className="text-2xl font-semibold text-gray-800">Recent Activity</h2>
+      <ul className="mt-4 space-y-2">
+        <li className="flex justify-between">
+          <span className="text-gray-700">Dinner with friends</span>
+          <span className="text-gray-600">$50</span>
+        </li>
+        <li className="flex justify-between">
+          <span className="text-gray-700">Grocery shopping</span>
+          <span className="text-gray-600">$80</span>
+        </li>
+        <li className="flex justify-between">
+          <span className="text-gray-700">Movie Night</span>
+          <span className="text-gray-600">$30</span>
+        </li>
+      </ul>
+    </div>
+
+    {/* Call to Action Section */}
+    <div className="mt-6 text-center">
+      <h2 className="text-2xl font-semibold text-gray-800">What would you like to do next?</h2>
+      <div className="mt-4 space-x-4">
+     
+        <a
+          href="/groups"
+          className="inline-block px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600"
+        >
+          Manage Groups
+        </a>
+      </div>
     </div>
   </div>
 );
+
+
+// const Expenses = ({ group, expenses }) => (
+//   <div className="p-4">
+//     <h1 className="text-3xl font-bold text-gray-800">{group.name} Expenses</h1>
+//     <div className="space-y-4">
+//       {expenses.length > 0 ? (
+//         expenses.map((expense, index) => (
+//           <div key={index} className="bg-white p-4 shadow rounded-md">
+//             <div className="flex justify-between">
+//               <span>{expense.date}</span>
+//               <div className="flex space-x-4">
+//                 <span>
+//                   {expense.paidBy} Paid {expense.amount}
+//                 </span>
+//                 <span>{expense.description}</span>
+//                 <span>You owe {expense.owesAmount}</span>
+//               </div>
+//             </div>
+//           </div>
+//         ))
+//       ) : (
+//         <p className="text-gray-600">No expenses found for this group.</p>
+//       )}
+//     </div>
+//   </div>
+// );
+
 
 const AddExpenseForm = ({ onSubmit, groupMembers, onCancel }) => {
   const [description, setDescription] = useState("");
@@ -66,43 +121,43 @@ const AddExpenseForm = ({ onSubmit, groupMembers, onCancel }) => {
 
   return (
     <div className="bg-white p-6 shadow-lg rounded-lg mt-6">
-      <h2 className="text-2xl mb-4">Add Expense</h2>
+      <h2 className="text-3xl font-bold mb-4 text-gray-800">Add Expense</h2>
       <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-gray-700">Description</label>
+        <div className="mb-6">
+          <label className="block text-gray-700 font-semibold mb-2">Description</label>
           <input
             type="text"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full border border-gray-300 p-2 rounded-md"
+            className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
             required
           />
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Amount</label>
+        <div className="mb-6">
+          <label className="block text-gray-700 font-semibold mb-2">Amount</label>
           <input
             type="number"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="w-full border border-gray-300 p-2 rounded-md"
+            className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
             required
           />
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Split Option</label>
+        <div className="mb-6">
+          <label className="block text-gray-700 font-semibold mb-2">Split Option</label>
           <select
             value={splitOption}
             onChange={(e) => setSplitOption(e.target.value)}
-            className="w-full border border-gray-300 p-2 rounded-md"
+            className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
           >
             <option value="equally">Equally</option>
             <option value="manually">Manually</option>
           </select>
         </div>
         {splitOption === "manually" && (
-          <div className="mb-4">
-            <label className="block text-gray-700">Select Members</label>
-            <div className="grid grid-cols-2 gap-2">
+          <div className="mb-6">
+            <label className="block text-gray-700 font-semibold mb-2">Select Members</label>
+            <div className="grid grid-cols-2 gap-4">
               {groupMembers.map((member) => (
                 <div key={member.id} className="flex items-center">
                   <input
@@ -110,61 +165,65 @@ const AddExpenseForm = ({ onSubmit, groupMembers, onCancel }) => {
                     onChange={() => handleMemberSelect(member)}
                     className="mr-2"
                   />
-                  <span>{member.name}</span>
+                  <span className={`text-gray-800 ${selectedMembers.includes(member) ? 'font-bold' : ''}`}>{member.name}</span>
                 </div>
               ))}
             </div>
           </div>
         )}
-        <button
-          type="submit"
-          className="bg-teal-500 text-white px-6 py-2 rounded-md"
-        >
-          Add Expense
-        </button>
-        <button
-          type="button"
-          onClick={onCancel}
-          className="bg-red-500 text-white px-6 py-2 rounded-md ml-4"
-        >
-          Cancel
-        </button>
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="bg-teal-500 text-white px-6 py-2 rounded-md shadow hover:bg-teal-600 transition duration-300"
+          >
+            Add Expense
+          </button>
+          <button
+            type="button"
+            onClick={onCancel}
+            className="bg-red-500 text-white px-6 py-2 rounded-md ml-4 shadow hover:bg-red-600 transition duration-300"
+          >
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
   );
 };
 
 const SettleUpForm = ({ balances, onSettle, onCancel }) => (
-  <div className="p-4">
-    <h2 className="text-2xl font-bold mb-4">Settle Balances</h2>
+  <div className="p-6 bg-gray-100 rounded-lg shadow-md">
+    <h2 className="text-3xl font-bold text-gray-800 mb-6">Settle Balances</h2>
     {balances.length > 0 ? (
       balances.map((balance, index) => (
         <div
           key={index}
-          className="flex justify-between items-center bg-white p-4 rounded-md mb-4 shadow"
+          className="flex justify-between items-center bg-white p-4 rounded-md mb-4 shadow transition duration-300 ease-in-out hover:shadow-lg"
         >
-          <span>
-            {balance.memberName} owes you {balance.amount}
+          <span className="text-lg text-gray-700">
+            {balance.memberName} owes you 
+            <span className="font-bold text-teal-600"> ${balance.amount}</span>
           </span>
           <button
             onClick={() => onSettle(balance)}
-            className="bg-green-500 text-white px-4 py-2 rounded-md"
+            className="bg-teal-500 text-white px-4 py-2 rounded-md transition duration-300 ease-in-out hover:bg-teal-600 hover:shadow-lg"
           >
             Settle
           </button>
         </div>
       ))
     ) : (
-      <p className="text-gray-600">No balances to settle up.</p>
+      <p className="text-gray-600 text-lg">No balances to settle up.</p>
     )}
     <button
       onClick={onCancel}
-      className="bg-red-500 text-white px-6 py-2 rounded-md"
+      className="mt-4 bg-red-500 text-white px-6 py-2 rounded-md transition duration-300 ease-in-out hover:bg-red-600"
     >
       Cancel
     </button>
   </div>
 );
+
 
 const GroupBalances = ({ balances }) => (
   <div className="bg-white shadow-lg rounded-lg p-6 mt-6">
@@ -211,6 +270,8 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [isRecentActivityOpen, setIsRecentActivityOpen] = useState(false);
 
+
+  
   // Mock data for group balances and members
   const groupBalances = [
     { memberName: "John", amount: 50, isOwedToYou: true },
@@ -253,9 +314,12 @@ const Dashboard = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
+    localStorage.removeItem('token'); // Remove the token on logout
+    window.location.href = '/login'; // Redirect to login page
   };
+
+
+
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -265,9 +329,9 @@ const Dashboard = () => {
           {isMenuOpen ? "Close Menu" : "Open Menu"}
         </button>
         <h1 className="text-2xl font-extrabold">BILLSPILL</h1>
-        <button onClick={handleLogout} className="bg-red-500 px-4 py-2 rounded">
-          Logout
-        </button>
+        <button onClick={handleLogout} className="mt-4 p-2 bg-red-500 text-white rounded">
+        Logout
+      </button>
       </nav>
       <div className="flex flex-grow">
     <Sidebar isOpen={isMenuOpen} onGroupClick={handleGroupClick} />

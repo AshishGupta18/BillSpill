@@ -1,27 +1,66 @@
+// server.js
 import express from 'express';
-import mongoose from 'mongoose';
+import { json } from 'body-parser';
+import { hash, compare } from 'bcryptjs';
+import { sign } from 'jsonwebtoken';
 import cors from 'cors';
-import dotenv from 'dotenv';
-import authRoutes from './routes/auth.js'; // Import your auth routes
-import User from './models/User.js';
+import { config } from 'dotenv';
 
-dotenv.config();
-
+config();
 const app = express();
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// MongoDB connection
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.error(err));
-
-// Routes
-app.use('/api/auth', authRoutes); // Use the auth routes
-
 const PORT = process.env.PORT || 5000;
+const SECRET_KEY = process.env.SECRET_KEY;
+
+app.use(cors());
+app.use(json());
+
+// In-memory user storage (for demo purposes)
+let users = [];
+
+// Signup endpoint
+app.post('/signup', async (req, res) => {
+    const { username, email, password } = req.body;
+
+    // Check if user already exists
+    const existingUser = users.find(user => user.email === email);
+    if (existingUser) {
+        return res.status(400).json({ message: 'User already exists' });
+    }
+
+    // Hash the password
+    const hashedPassword = await hash(password, 10);
+
+    // Create new user
+    const newUser = { username, email, password: hashedPassword };
+    users.push(newUser);
+
+    // Create a token
+    const token = sign({ email }, SECRET_KEY, { expiresIn: '1h' });
+    res.status(201).json({ token });
+});
+
+// Login endpoint
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    // Find user
+    const user = users.find(user => user.email === email);
+    if (!user) {
+        return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    // Validate password
+    const isPasswordValid = await compare(password, user.password);
+    if (!isPasswordValid) {
+        return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    // Create a token
+    const token = sign({ email }, SECRET_KEY, { expiresIn: '1h' });
+    res.json({ token });
+});
+
+
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
