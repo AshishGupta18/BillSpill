@@ -1,37 +1,36 @@
 import React from 'react';
 
-const PaymentList = ({ expenses }) => {
-    return (
-        <div className="space-y-4">
-            {expenses.length > 0 ? (
-                expenses.map((expense, index) => (
-                    <div key={index} className="flex justify-between items-center bg-white shadow-lg rounded-md p-4">
-                        {/* Date */}
-                        <div className="text-gray-600 w-1/6">
-                            {new Date(expense.date).toLocaleDateString()}
-                        </div>
-                        
-                        {/* Description */}
-                        <div className="flex-1">
-                            <p className="text-lg font-semibold text-gray-700">
-                                {expense.description}
-                            </p>
-                        </div>
+// Sample data for payments
+const payments = [
+    { id: '1', amount: 500, category: 'Food', date: '2024-10-01' },
+    { id: '2', amount: 1500, category: 'Transport', date: '2024-10-02' },
+    { id: '3', amount: 2000, category: 'Groceries', date: '2024-10-03' },
+    { id: '4', amount: 750, category: 'Entertainment', date: '2024-10-04' },
+];
 
-                        {/* Payment Info */}
-                        <div className="w-1/3 text-right">
-                            <p className="text-gray-700">
-                                <span className="font-bold">{expense.paidBy}</span> paid ₹{expense.paidAmount}
-                            </p>
-                            <p className="text-gray-500">
-                                You owe ₹{expense.owesAmount}
-                            </p>
-                        </div>
-                    </div>
-                ))
-            ) : (
-                <p className="text-gray-500">No expenses available.</p>
-            )}
+const PaymentList = () => {
+    return (
+        <div className="bg-white p-6 rounded-lg shadow-md mt-6">
+            <h2 className="text-2xl font-semibold mb-4 border-b-2 border-teal-500 pb-2">Payment List</h2>
+            <div className="space-y-2">
+                {payments.map((payment) => (
+                    <PaymentRow key={payment.id} payment={payment} />
+                ))}
+            </div>
+        </div>
+    );
+};
+
+const PaymentRow = ({ payment }) => {
+    return (
+        <div className="flex justify-between items-center bg-gray-50 p-4 rounded-md hover:bg-gray-100 transition duration-200 border border-gray-200">
+            <div className="flex flex-col">
+                <span className="text-teal-600 font-bold text-lg">
+                    ₹{payment.amount}
+                </span>
+                <span className="text-gray-600 text-sm">{payment.category}</span>
+            </div>
+            <span className="text-gray-500 text-sm">{payment.date}</span>
         </div>
     );
 };

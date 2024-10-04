@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import NewGroupModal from './NewGroupModal';
+import RecentActivities from './RecentActivities'; // Import RecentActivities component
 
 const Sidebar = ({ onGroupClick }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [showRecentActivities, setShowRecentActivities] = useState(false);
     const [groups, setGroups] = useState([
         { id: '1', name: 'Family' },
         { id: '2', name: 'Friends' },
@@ -11,8 +13,18 @@ const Sidebar = ({ onGroupClick }) => {
         { id: '4', name: 'Gym Buddies' },
     ]);
 
+    const [recentActivities] = useState([
+        { id: 1, text: 'Payment of $20 to Family on 10/01/2024' },
+        { id: 2, text: 'Payment of $50 to Friends on 09/29/2024' },
+        { id: 3, text: 'Added a new expense to Work group on 09/28/2024' },
+    ]);
+
     const handleGroupSubmit = (newGroup) => {
         setGroups([...groups, newGroup]);
+    };
+
+    const toggleRecentActivities = () => {
+        setShowRecentActivities(!showRecentActivities);
     };
 
     return (
@@ -25,12 +37,15 @@ const Sidebar = ({ onGroupClick }) => {
                 </Link>
             </div>
 
-            {/* Recent Activity */}
-            <div className="flex items-center mb-6">
-                <Link to="/recent-activity" className="flex items-center space-x-4">
-                    <i className="fas fa-flag text-gray-700 text-2xl" />
-                    <span className="text-gray-700 text-lg font-semibold">Recent Activity</span>
-                </Link>
+            {/* Recent Activity Toggle Button */}
+            <div className="mb-6">
+                <button 
+                    onClick={toggleRecentActivities} 
+                    className="flex items-center space-x-2 text-gray-700 font-semibold"
+                >
+                    <i className={`fas ${showRecentActivities ? 'fa-minus' : 'fa-plus'} text-gray-700`} />
+                    <span>{showRecentActivities ? 'Hide Recent Activity' : 'Show Recent Activity'}</span>
+                </button>
             </div>
 
             {/* Group List */}
@@ -47,13 +62,14 @@ const Sidebar = ({ onGroupClick }) => {
                 </div>
                 <ul className="space-y-2">
                     {groups.map((group) => (
-                        <li
-                            key={group.id}
-                            className="flex items-center space-x-4 p-2 rounded-md hover:bg-gray-200 transition duration-200"
-                            onClick={() => onGroupClick(group.id)}
-                        >
-                            <i className="fas fa-bookmark text-teal-600 text-xl" />
-                            <span className="text-teal-600 hover:text-teal-700">{group.name}</span>
+                        <li key={group.id} className="flex items-center">
+                            <button
+                                className="flex items-center space-x-4 p-2 rounded-md hover:bg-gray-200 transition duration-200 w-full text-left"
+                                onClick={() => onGroupClick(group.id)} // Call onGroupClick when clicked
+                            >
+                                <i className="fas fa-bookmark text-teal-600 text-xl" />
+                                <span className="text-teal-600 hover:text-teal-700">{group.name}</span>
+                            </button>
                         </li>
                     ))}
                 </ul>
@@ -65,6 +81,14 @@ const Sidebar = ({ onGroupClick }) => {
                 onClose={() => setIsModalOpen(false)}
                 onGroupSubmit={handleGroupSubmit}
             />
+
+            {/* Recent Activities Component */}
+            {showRecentActivities && (
+                <RecentActivities 
+                    activities={recentActivities} 
+                    onClose={() => setShowRecentActivities(false)} 
+                />
+            )}
         </div>
     );
 };

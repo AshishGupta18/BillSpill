@@ -1,21 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../../API/api';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    try {
-      const response = await login(email, password);
-      localStorage.setItem('token', response.data.token);
-      navigate('/dashboard');
-    } catch (error) {
-      console.error('Login error:', error);
-    }
+    // Navigate to dashboard immediately without any checks
+    navigate('/dashboard'); 
   };
 
   return (
@@ -41,11 +35,14 @@ const Login = () => {
           />
           <button
             type="submit"
-            className="w-full p-2 bg-teal-500 text-white rounded"
+            className="w-full p-2 bg-teal-500 text-white rounded hover:bg-teal-600"
           >
             Login
           </button>
         </form>
+        <p className="text-center text-gray-600">
+          Don't have an account? <a href="/signup" className="text-teal-500 hover:underline">Sign up</a>
+        </p>
       </div>
     </div>
   );
