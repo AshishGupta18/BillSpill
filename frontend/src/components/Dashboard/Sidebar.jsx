@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from "react-router-dom";
+import NewGroupModal from './NewGroupModal';
 
 const Sidebar = ({ onGroupClick }) => {
-    const sampleGroups = [
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [groups, setGroups] = useState([
         { id: '1', name: 'Family' },
         { id: '2', name: 'Friends' },
         { id: '3', name: 'Work' },
         { id: '4', name: 'Gym Buddies' },
-    ];
+    ]);
+
+    const handleGroupSubmit = (newGroup) => {
+        setGroups([...groups, newGroup]);
+    };
 
     return (
         <div className="p-4">
@@ -31,13 +37,16 @@ const Sidebar = ({ onGroupClick }) => {
             <div>
                 <div className="flex justify-between items-center bg-gray-100 p-2 rounded-md mb-4">
                     <p className="text-gray-600 font-bold">GROUPS</p>
-                    <Link to="/new-group" className="text-teal-600 flex items-center space-x-1">
+                    <button
+                        className="text-teal-600 flex items-center space-x-1"
+                        onClick={() => setIsModalOpen(true)}
+                    >
                         <i className="fa fa-plus text-teal-600" />
                         <span>Add</span>
-                    </Link>
+                    </button>
                 </div>
                 <ul className="space-y-2">
-                    {sampleGroups.map((group) => (
+                    {groups.map((group) => (
                         <li
                             key={group.id}
                             className="flex items-center space-x-4 p-2 rounded-md hover:bg-gray-200 transition duration-200"
@@ -49,6 +58,13 @@ const Sidebar = ({ onGroupClick }) => {
                     ))}
                 </ul>
             </div>
+
+            {/* New Group Modal */}
+            <NewGroupModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onGroupSubmit={handleGroupSubmit}
+            />
         </div>
     );
 };

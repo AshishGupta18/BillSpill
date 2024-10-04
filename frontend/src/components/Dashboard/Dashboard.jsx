@@ -6,17 +6,9 @@ import PaymentList from '../PaymentList';  // Assuming this is the component tha
 const Dashboard = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [selectedGroup, setSelectedGroup] = useState(null);
-    const [expenses, setExpenses] = useState([]);
 
-    // Mock expenses data for selected group
     const handleGroupClick = (groupId) => {
         setSelectedGroup(groupId);
-        const mockExpenses = [
-            { date: '2024-01-15', description: 'Dinner', amount: 50, paidBy: 'Om', paidAmount: 50, owesAmount: 0 },
-            { date: '2024-01-20', description: 'Groceries', amount: 100, paidBy: 'Ashish', paidAmount: 30, owesAmount: 70 },
-            { date: '2024-02-05', description: 'Movie Night', amount: 40, paidBy: 'Sara', paidAmount: 40, owesAmount: 0 },
-        ];
-        setExpenses(mockExpenses);
     };
 
     return (
@@ -33,46 +25,35 @@ const Dashboard = () => {
                     </button>
                     <ul className="hidden lg:flex space-x-4 items-center">
                         <li>
-                            <Link to="/home" className="bg-teal-500 px-4 py-2 rounded hover:bg-teal-700">Dashboard</Link>
+                            <Link to="/home" className="bg-teal-500 px-4 py-2 rounded hover:bg-teal-700 transition duration-200">Home</Link>
                         </li>
                         <li>
-                            <Link to="/profile" className="px-4 py-2 rounded hover:bg-teal-500">
-                                <i className="fas fa-user"></i> Profile
-                            </Link>
+                            <Link to="/dashboard" className="px-4 py-2 rounded hover:bg-teal-500 transition duration-200">Dashboard</Link>
                         </li>
                         <li>
-                            <button className="bg-red-500 px-4 py-2 rounded hover:bg-red-600">Log Out</button>
+                            <button className="px-4 py-2 rounded bg-red-500 hover:bg-red-700 transition duration-200">Logout</button>
                         </li>
                     </ul>
                 </div>
             </nav>
 
-            {/* Main Content */}
-            <div className="flex flex-1">
+            {/* Main Layout */}
+            <div className="flex flex-grow">
                 {/* Sidebar */}
-                <aside className={`w-64 bg-white shadow-lg lg:block ${isMenuOpen ? 'block' : 'hidden'}`}>
+                <div className={`lg:w-1/4 w-full bg-white shadow-lg lg:shadow-none ${isMenuOpen ? 'block' : 'hidden'} lg:block`}>
                     <Sidebar onGroupClick={handleGroupClick} />
-                </aside>
+                </div>
 
-                {/* Main Dashboard Area */}
-                <main className="flex-1 p-6 bg-gray-50">
-                    {/* If a group is selected, show the expense list */}
+                {/* Main Content */}
+                <div className="flex-grow p-8">
                     {selectedGroup ? (
-                        <div>
-                            <h1 className="text-2xl font-bold mb-4">Group Expenses</h1>
-                            <PaymentList expenses={expenses} />
-                        </div>
+                        <PaymentList groupId={selectedGroup} />
                     ) : (
-                        <div className="flex flex-col items-center justify-center h-full space-y-6">
-                            <button className="bg-teal-500 text-white px-6 py-3 rounded-lg">
-                                Add Expense
-                            </button>
-                            <button className="bg-green-500 text-white px-6 py-3 rounded-lg">
-                                Settle Up
-                            </button>
+                        <div className="text-center text-gray-600">
+                            <p>Select a group to view expenses.</p>
                         </div>
                     )}
-                </main>
+                </div>
             </div>
         </div>
     );
