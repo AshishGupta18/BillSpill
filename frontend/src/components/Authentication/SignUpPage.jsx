@@ -3,7 +3,7 @@ import { signup } from '../../API/api'; // Ensure this path is correct
 import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
-  const [username, setUsername] = useState(''); // Added username
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const Signup = () => {
       navigate('/dashboard'); // Redirect to dashboard
     } catch (error) {
       console.error('Signup error:', error);
-      alert('Signup failed. Please try again.'); // Notify user of error
+      alert('Signup failed. Please try again.');
     }
   };
 
@@ -26,7 +26,7 @@ const Signup = () => {
       <form onSubmit={handleSignup} className="bg-white p-6 rounded shadow-md">
         <input
           type="text"
-          placeholder="Username" // Added username input
+          placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
