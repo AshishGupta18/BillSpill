@@ -31,7 +31,7 @@ const Sidebar = ({ onGroupClick }) => {
         <div className="p-4">
             {/* Dashboard Header */}
             <div className="flex items-center mb-6">
-                <Link to="/home" className="flex items-center space-x-4">
+                <Link to="/dashboard" className="flex items-center space-x-4">
                     <img className="w-12 h-12 rounded-full" src="https://img.icons8.com/fluent/48/000000/love-letter.png" alt="Dashboard" />
                     <span className="text-gray-700 text-lg font-semibold">Dashboard</span>
                 </Link>

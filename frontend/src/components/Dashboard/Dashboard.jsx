@@ -264,59 +264,69 @@ const Dashboard = () => {
         <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
           {isMenuOpen ? "Close Menu" : "Open Menu"}
         </button>
-        <h1 className="text-lg font-bold">BillSplit</h1>
+        <h1 className="text-2xl font-extrabold">BILLSPILL</h1>
         <button onClick={handleLogout} className="bg-red-500 px-4 py-2 rounded">
           Logout
         </button>
       </nav>
       <div className="flex flex-grow">
-        <Sidebar isOpen={isMenuOpen} onGroupClick={handleGroupClick} />
-        <div className="flex-grow p-4">
-          <DashboardHome />
-          {selectedGroup && (
+    <Sidebar isOpen={isMenuOpen} onGroupClick={handleGroupClick} />
+    <div className="flex-grow p-4">
+        <DashboardHome />
+        {selectedGroup && (
             <div>
-              <Expenses group={selectedGroup} expenses={expenses} />
-              <GroupBalances balances={groupBalances} />
-              <PaymentList />
-              <div className="flex justify-between mt-4">
-                <button
-                  onClick={() => setIsAddExpenseOpen(true)}
-                  className="bg-teal-500 text-white px-6 py-2 rounded-md"
-                >
-                  Add Expense
-                </button>
-                <button
-                  onClick={() => setIsSettleUpOpen(true)}
-                  className="bg-teal-500 text-white px-6 py-2 rounded-md"
-                >
-                  Settle Up
-                </button>
-              </div>
-              {isAddExpenseOpen && (
-                <AddExpenseForm
-                  onSubmit={handleAddExpense}
-                  groupMembers={groupMembers}
-                  onCancel={() => setIsAddExpenseOpen(false)}
-                />
-              )}
-              {isSettleUpOpen && (
-                <SettleUpForm
-                  balances={groupBalances}
-                  onSettle={handleSettleUp}
-                  onCancel={() => setIsSettleUpOpen(false)}
-                />
-              )}
-              {/* Recent Activity Modal */}
-              {isRecentActivityOpen && (
-                <RecentActivity
-                  onClose={() => setIsRecentActivityOpen(false)}
-                />
-              )}
+                {/* Use flex container to place PaymentList and GroupBalances side by side */}
+                <div className="flex justify-between">
+                    <div className="w-2/3 pr-4"> {/* Adjust the width as needed */}
+                        <PaymentList />
+                    </div>
+                    <div className="w-1/3"> {/* Adjust the width as needed */}
+                        <GroupBalances balances={groupBalances} />
+                    </div>
+                </div>
+
+                <div className="flex justify-start ml-5 mt-4 gap-4"> {/* Use gap-4 for spacing */}
+    <button
+        onClick={() => setIsAddExpenseOpen(true)}
+        className="bg-teal-500 text-white px-6 py-2 rounded-md"
+    >
+        Add Expense
+    </button>
+    <button
+        onClick={() => setIsSettleUpOpen(true)}
+        className="bg-teal-500 text-white px-6 py-2 rounded-md"
+    >
+        Settle Up
+    </button>
+</div>
+
+                {isAddExpenseOpen && (
+                    <AddExpenseForm
+                        onSubmit={handleAddExpense}
+                        groupMembers={groupMembers}
+                        onCancel={() => setIsAddExpenseOpen(false)}
+                    />
+                )}
+                {isSettleUpOpen && (
+                    <SettleUpForm
+                        balances={groupBalances}
+                        onSettle={handleSettleUp}
+                        onCancel={() => setIsSettleUpOpen(false)}
+                    />
+                )}
+
+                {/* Recent Activity Modal */}
+                {isRecentActivityOpen && (
+                    <RecentActivity
+                        onClose={() => setIsRecentActivityOpen(false)}
+                    />
+                )}
             </div>
-          )}
-        </div>
-      </div>
+        )}
     </div>
+</div>
+      </div>
+    
   );
 };
 
