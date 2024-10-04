@@ -32,11 +32,11 @@ Before you begin, ensure you have the following installed on your machine:
 
 2.	**Navigate to the project directory:**   
 ```
-cd BillSplit
+cd BillSplill
+```
 	
-3.	**Install dependencies for both frontend and backend:**   
+3.  **Install dependencies for both frontend and backend:**   
 
-```bash
 Install dependencies for both frontend and backend:
 
 
@@ -45,9 +45,11 @@ Running the Application
 	1.	Start the backend server:
 	•	Navigate to the backend directory and start the server:
 
- ```
- cd backend
-npm start  ``` 
+
+``` 
+cd backend
+npm start
+```
 
 Ensure you have a .env file in the backend directory to configure your MongoDB connection string and JWT secret.
 
@@ -55,7 +57,8 @@ Ensure you have a .env file in the backend directory to configure your MongoDB c
 	•	Navigate to the frontend directory and start the React application:
 ```
 cd ../frontend
-npm start```
+npm start
+```
 
 3.	Open your browser and go to http://localhost:5173 to view the application.
 
